@@ -1,7 +1,10 @@
+@import scala.util.Random
+
 @(message: String)
 
 @main("Welcome to Play") {
 
     @play20.welcome(message)
 
+    <a href="https://home.nest.com/login/oauth2?client_id=760f3e75-80d4-43ab-9bee-5e3c6a7555e4&state=@Random.nextString(8)">Login</a>
 }
