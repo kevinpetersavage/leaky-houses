@@ -1,10 +1,10 @@
 import akka.actor.Props
 import play.api._
 import play.libs.Akka
-import nest.NestActor
+import nest.{NestParser, NestActor}
 
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
-    Akka.system.actorOf(Props(new NestActor(System.getProperty("access.token"))))
+    Akka.system.actorOf(Props(new NestActor(System.getProperty("access.token"), new NestParser())))
   }
 }
