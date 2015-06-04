@@ -9,7 +9,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 class OpenWeatherMapClient(host: String, appId: String) {
   def getTemperature(lat: Double, lon: Double): Future[Option[Double]] = {
-    val url = s"http://$host/data/2.5/weather?lat=$lat&lon=$lon&units=metric&APPID=423a28a1903f2d857513379bb5939d77"
+    val url = s"http://$host/data/2.5/weather?lat=$lat&lon=$lon&units=metric&APPID=$appId"
     val eventualResponse = WS.url(url).get()
     eventualResponse
       .map(response => Json.parse(response.body) \ "main" \ "temp")
