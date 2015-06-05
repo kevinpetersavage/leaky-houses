@@ -36,7 +36,7 @@ class OpenWeatherMapClientSpec extends FlatSpec with Matchers with BeforeAndAfte
         .`match` (get("/data/2.5/weather"), parameter("lat","51.5"), parameter("lon","0.1"), parameter("units","metric"), parameter("APPID",appId))
         .`then`(ok(), stringContent(exampleResponse))
 
-      val temperatureFuture = new OpenWeatherMapClient(s"localhost:${server.getPort}", appId).getTemperature(51.5, 0.1)
+      val temperatureFuture = new OpenWeatherMapClient("http", s"localhost:${server.getPort}", appId).getTemperature(51.5, 0.1)
       val temperature = Await.result(temperatureFuture, 1 second).get
 
       temperature should be(10.807)
