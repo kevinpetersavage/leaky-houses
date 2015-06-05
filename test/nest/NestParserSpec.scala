@@ -29,9 +29,20 @@ class NestParserSpec extends FlatSpec with Matchers with MockitoSugar{
     val typesOfDevice = List(thermostats, smokeDetectors).toIterable.asJava
     when(devices.getChildren).thenReturn(typesOfDevice)
 
+    val structures = mock[DataSnapshot]
+    when(snapshot.child("structures")).thenReturn(structures)
+    val myHouse = mock[DataSnapshot]
+    when(structures.getChildren).thenReturn(List(myHouse).toIterable.asJava)
+
+    val country = mock[DataSnapshot]
+    val postCode = mock[DataSnapshot]
+    when(myHouse.child("country_code")).thenReturn(country)
+    when(myHouse.child("postal_code")).thenReturn(postCode)
+    when(country.getValue).thenReturn("US","US")
+    when(postCode.getValue).thenReturn("12345","12345")
 
     val result = new NestParser().parse(snapshot)
 
-    result should contain (("Living Room (901E)","25"))
+    result should be (NestReading("Living Room (901E)",25.0,"12345","US"))
   }
 }

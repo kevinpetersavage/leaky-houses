@@ -36,14 +36,15 @@ class NestActor(nestToken: String, nestParser: NestParser, weather: OpenWeatherM
   override def receive: Receive = {
     case s: DataSnapshot => {
       try {
-        val parse: Map[String, String] = nestParser.parse(s).toMap
-        parse.foreach(println)
+        val nestReading = nestParser.parse(s)
+        println(nestReading)
 
-        val location = locator.getLocation(parse("postal_code"),parse("country_code"))
-        val temperature = location.map(_.map((weather.getTemperature _).tupled))
-
-        location.onComplete(_.get.foreach(println))
-        temperature.onComplete(_.get.get.onComplete(_.get.foreach(println)))
+        for (
+          location <- locator.getLocation(nestReading.postcode, nestReading.country);
+          temperature <- location.map((weather.getTemperature _).tupled)
+        ) {
+          temperature.onComplete(_.get.foreach(println))
+        }
       } catch {
         case e : Exception => Logger.error("exception parsing nest data", e);
       }

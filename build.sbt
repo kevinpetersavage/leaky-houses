@@ -10,14 +10,17 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  specs2 % Test
+  specs2 % Test,
+  evolutions
 )
 
-libraryDependencies += "com.firebase" % "firebase-client-jvm" % "2.2.4"
-
-libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
-
-libraryDependencies += "com.xebialabs.restito" % "restito" % "0.5" % "test"
+libraryDependencies ++= Seq(
+  "com.firebase" % "firebase-client-jvm" % "2.2.4",
+  "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
+  "com.xebialabs.restito" % "restito" % "0.5" % "test",
+  "com.typesafe.play" %% "play-slick" % "1.0.0",
+  "com.h2database" % "h2" % "1.4.187"
+)
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
