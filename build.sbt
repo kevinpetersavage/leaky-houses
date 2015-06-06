@@ -18,7 +18,6 @@ libraryDependencies ++= Seq(
   "com.firebase" % "firebase-client-jvm" % "2.2.4",
   "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
   "com.xebialabs.restito" % "restito" % "0.5" % "test",
-  "com.typesafe.play" %% "play-slick" % "1.0.0",
   "com.h2database" % "h2" % "1.4.187"
 )
 

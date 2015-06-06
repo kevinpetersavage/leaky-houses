@@ -3,12 +3,14 @@ package nest
 import akka.actor.Actor
 import com.firebase.client.Firebase.AuthResultHandler
 import com.firebase.client._
+import database.ReadingLogger
 import geolocation.LocationClient
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits._
 import weather.OpenWeatherMapClient
 
-class NestActor(nestToken: String, nestParser: NestParser, weather: OpenWeatherMapClient, locator: LocationClient) extends Actor {
+class NestActor(nestToken: String, nestParser: NestParser, weather: OpenWeatherMapClient, locator: LocationClient,
+                 readingLogger: ReadingLogger) extends Actor {
 
   val fb = new Firebase("https://developer-api.nest.com")
 
@@ -37,13 +39,11 @@ class NestActor(nestToken: String, nestParser: NestParser, weather: OpenWeatherM
     case s: DataSnapshot => {
       try {
         val nestReading = nestParser.parse(s)
-        println(nestReading)
-
         for (
           location <- locator.getLocation(nestReading.postcode, nestReading.country);
           temperature <- location.map((weather.getTemperature _).tupled)
         ) {
-          temperature.onComplete(_.get.foreach(println))
+          temperature.onComplete(_.foreach(_.foreach(readingLogger.log(nestReading, _))))
         }
       } catch {
         case e : Exception => Logger.error("exception parsing nest data", e);
